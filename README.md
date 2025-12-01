@@ -15,12 +15,14 @@ For example:
 
 ```console
 $ # As a parameter
-$ ./01/01-1.rb ./01/example
-11
+$ ./01/01.rb ./01/example
+3
+6
 
 $ # As stdin
-$ ./01/01-2.rb < ./01/example
-31
+$ ./01/01.rb < ./01/example
+3
+6
 ```
 
 None of Quinn's input files are committed to the repo, as per the rules.
