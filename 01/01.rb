@@ -11,8 +11,7 @@ class Dial
 
   def turn!(n)
     @pass_click += clicks(acc,n)
-    @acc += (n%100)
-    @acc %= 100
+    @acc = (acc + n) % 100
     @pass += 1 if acc.zero?
   end
 
