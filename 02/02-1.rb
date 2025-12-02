@@ -1,10 +1,7 @@
 #!/usr/bin/env ruby
 
 def invalid?(n)
-  s = n.to_s
-  half = s.length/2
-  return if half*2 != s.length
-  s[0,half] == s[half,half] 
+  /\A(.+)\1\Z/ =~ n.to_s
 end
 
 acc = 0
