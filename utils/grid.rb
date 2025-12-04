@@ -115,14 +115,14 @@ class Grid
   # If a block is given, return only the ones for which that block returns true
   # Block arguments are v,c,current,current_c
   def neighbours(v=cursor, diagonal: false)
-    directions(diagonal: diagonal).map {|_,m| move(m,v)}.compact.then do |n|
+    directions(diagonal:).map {|_,m| move(m,v)}.compact.then do |n|
       block_given? ? n.select {|v2| yield v2,self[v2],v,self[v]} : n
     end
   end
 
   # Get the subset of neighbours that have this char
-  def neighbours_with_char(char, v=cursor)
-    neighbours(v) {|v,c| c == char}
+  def neighbours_with_char(char, v=cursor, diagonal: false)
+    neighbours(v, diagonal:) {|v,c| c == char}
   end
 
   def corners
