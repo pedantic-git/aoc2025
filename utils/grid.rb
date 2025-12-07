@@ -11,7 +11,7 @@ class Grid
   include Enumerable
   extend Forwardable
 
-  def_delegators :@cells, :each, :key?, :select
+  def_delegators :@cells, :each, :key?, :select, :==
 
   attr_reader :cursor, :nw_corner, :se_corner
   attr_accessor :cells
