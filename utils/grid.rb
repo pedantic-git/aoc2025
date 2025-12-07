@@ -33,6 +33,14 @@ class Grid
     end
   end
 
+  def width
+    se_corner[1] + 1
+  end
+
+  def height
+    se_corner[0] + 1
+  end
+
   def []=(*v, c)
     v = cast_vector(v)
     @cells[v] = c
