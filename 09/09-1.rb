@@ -8,10 +8,7 @@ ne = coords.min_by { [-_1, _2] }
 sw = coords.min_by { [_1, -_2] }
 se = coords.min_by { [-_1, -_2] }
 
-p [nw,ne,sw,se]
+# There are more than 2 possible rectangles if the points are weirdly distributed
+# but they still involve extremes, right?
 
-# There are only two possible rectangles - se-nw or sw-ne
-senw = (se[0]-nw[0]+1) * (se[1]-nw[1]+1)
-swne = (sw[0]-ne[0]+1) * (sw[1]-ne[1]+1)
-
-p [senw, swne]
+p [nw,ne,sw,se].combination(2).map { (it[1][0]-it[0][0]+1) * (it[1][1]-it[1][0]+1) }.max
