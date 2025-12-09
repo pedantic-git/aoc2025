@@ -1,5 +1,4 @@
 #!/usr/bin/env ruby
-require 'matrix'
 
 # Find the size of a rectangle between vectors c1 and c2
 def rect(c1,c2)
@@ -8,5 +7,5 @@ def rect(c1,c2)
   x * y
 end
 
-coords = ARGF.readlines.map {it.split(',').map(&:to_i).then {Vector[*it]}}
+coords = ARGF.readlines.map {it.split(',').map(&:to_i)}
 p coords.combination(2).map { rect _1, _2 }.max
