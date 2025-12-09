@@ -4,13 +4,11 @@ require_relative '../utils/grid'
 
 class Tachyon < Grid
 
-  attr_accessor :row, :splits, :universes
+  attr_accessor :row, :splits
 
   def initialize(*)
     super
     @row = 1
-    @splits = 0
-    @universes = [self]
   end
 
   def process!
@@ -20,19 +18,14 @@ class Tachyon < Grid
   end
 
   def process_row!
-    us = universes.dup
-    puts "Row #{row}: currently #{us.length} universes!"
     0.upto(width-1) do |x|
-      us.each do |u|
-        if %w[S |].include? u[row-1, x]
-          if u[row,x] == '^'
-            u2 = u.dup
-            u[row,x-1] = '|'
-            u2[row,x+1] = '|'
-            universes << u2
-          else
-            u[row, x] = '|'
-          end
+      self[row-1, x] = 1 if self[row-1, x] == 'S' # start is actually 1
+      if self[row-1, x].kind_of?(Integer)
+        if self[row,x] == '^'
+          self[row, x-1] = self[row-1, x] + self[row, x-1].to_i
+          self[row, x+1] = self[row-1, x] + self[row, x+1].to_i
+        else
+          self[row, x] = self[row-1, x] + self[row, x].to_i
         end
       end
     end
@@ -41,7 +34,7 @@ class Tachyon < Grid
 
   def color(v,c)
     case c
-    when '|', 'S'
+    when /\d/, 'E'
       {color: :red, mode: :bright}
     when '^'
       {color: :green, mode: :bright}
@@ -49,8 +42,14 @@ class Tachyon < Grid
       super
     end
   end
+
+  def n_universes
+    finish = height-1
+    0.upto(width-1).map {self[finish,it]}.select {it.kind_of? Integer}.sum
+  end
 end
 
 t = Tachyon.new(ARGF)
 t.process!
-puts t.universes.length
+#puts t
+puts t.n_universes

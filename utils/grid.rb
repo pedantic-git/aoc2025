@@ -164,6 +164,8 @@ class Grid
 
   # Override this in subclasses to change how a cell is rendered
   def render(c,y,x)
+    c = c.to_s
+    c = 'E' if c.length > 1
     c.colorize(color(Vector[y,x], c))
   end
 
