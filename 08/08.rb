@@ -54,7 +54,7 @@ class Decoration
   def close_up!
     op = ordered_pairs
     pair = nil
-    until circuits.values.first.length == circuits.length
+    until op.empty? #circuits.values.first.length == circuits.length
       pair = op.pop
       join_circuits! *pair
     end
@@ -63,9 +63,12 @@ class Decoration
 
   # Join the two circuits that contain j1 and j2
   def join_circuits!(j1,j2)
-    p "Joining #{j1.to_a.join(',')} + #{j2.to_a.join(',')}"
+    return if circuits[j1] == circuits[j2]
+    p "Joining #{j1[0]} + #{j2[0]}"
+    p "HERE" if j1[0] == 117 || j2[0] == 117
     circuits[j1].join!(circuits[j2])
     circuits[j2].junctions.each {circuits[it] = circuits[j1]}
+    p "Longest circuit is now #{ordered_circuits.last.length}"
   end
 
   def ordered_circuits
@@ -84,6 +87,7 @@ d = Decoration.new(ARGF)
 
 # Part 2
 d.reset!
+p d.ordered_pairs
 pair = d.close_up!
 p pair
 p pair[0][0] * pair[1][0]
