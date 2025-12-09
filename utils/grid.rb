@@ -19,6 +19,7 @@ class Grid
   def initialize(io_or_cells=nil)
     @cursor = nil
     @cells = {}
+    return if io_or_cells.nil?
     if io_or_cells.kind_of? Hash
       @cells = io_or_cells
     else
@@ -27,9 +28,29 @@ class Grid
     set_corners!
   end
 
+  def self.from_coords(io)
+    new().tap do |g|
+      io.each do |s|
+        g[*s.split(',').map(&:to_i).reverse] = '#'
+      end
+      g.set_corners!
+      g.strict_each {|v| g[v] ||= '.'}
+    end
+  end
+
   def dup
     self.class.new(cells.dup).tap do |g|
       g.cursor = cursor
+    end
+  end
+
+  # An each that yields every vector from corner to corner even if the cell
+  # hasn't been filled yet
+  def strict_each
+    nw_corner[0].upto(se_corner[0]) do |y|
+      nw_corner[1].upto(se_corner[1]) do |x|
+        yield Vector[y,x]
+      end
     end
   end
 
