@@ -20,7 +20,7 @@ class Circuit
   end
 
   def inspect
-    "#<Circuit #{object_id}>"
+    "#<Circuit #{object_id} [#{length}]>"
   end
 
 end
@@ -39,7 +39,7 @@ class Decoration
   end
 
   def ordered_pairs
-     circuits.keys.combination(2).sort_by {(_1-_2).magnitude}
+     @op ||= circuits.keys.combination(2).sort_by {(_1-_2).magnitude}
   end
 
   # Assign the first n combinations to circuits
@@ -54,8 +54,8 @@ class Decoration
   def close_up!
     op = ordered_pairs
     pair = nil
-    until op.empty? #circuits.values.first.length == circuits.length
-      pair = op.pop
+    until circuits.values.first.length == circuits.length
+      pair = op.shift
       join_circuits! *pair
     end
     pair
@@ -64,11 +64,8 @@ class Decoration
   # Join the two circuits that contain j1 and j2
   def join_circuits!(j1,j2)
     return if circuits[j1] == circuits[j2]
-    p "Joining #{j1[0]} + #{j2[0]}"
-    p "HERE" if j1[0] == 117 || j2[0] == 117
     circuits[j1].join!(circuits[j2])
     circuits[j2].junctions.each {circuits[it] = circuits[j1]}
-    p "Longest circuit is now #{ordered_circuits.last.length}"
   end
 
   def ordered_circuits
@@ -82,13 +79,10 @@ end
 
 # Part 1
 d = Decoration.new(ARGF)
-# d.assign! 1000
-# p d.score
+d.assign! 1000
+p d.score
 
-# Part 2
+# # Part 2
 d.reset!
-p d.ordered_pairs
 pair = d.close_up!
-p pair
 p pair[0][0] * pair[1][0]
-
